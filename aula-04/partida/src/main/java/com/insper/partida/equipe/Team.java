@@ -1,21 +1,18 @@
 package com.insper.partida.equipe;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.insper.partida.game.Game;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
-@Entity
+@Document(collection = "team")
 public class Team {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id;
 
     private String identifier;
 
@@ -23,11 +20,4 @@ public class Team {
 
     private String stadium;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "away")
-    private List<Game> away;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "home")
-    private List<Game> home;
 }

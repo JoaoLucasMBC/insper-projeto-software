@@ -24,6 +24,11 @@ public class  TeamService {
         team.setName(saveTeam.getName());
         team.setIdentifier(saveTeam.getIdentifier());
 
+        Team teamIdentifier = teamRepository.findByIdentifier(saveTeam.getIdentifier());
+        if ( teamIdentifier != null) {
+            throw new RuntimeException("Time já cadastrado");
+        }
+
         team = teamRepository.save(team);
         return  TeamReturnDTO.covert(team);
     }

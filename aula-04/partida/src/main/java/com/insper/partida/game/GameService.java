@@ -2,7 +2,6 @@ package com.insper.partida.game;
 
 import com.insper.partida.equipe.Team;
 import com.insper.partida.equipe.TeamService;
-import com.insper.partida.equipe.dto.TeamReturnDTO;
 import com.insper.partida.game.dto.EditGameDTO;
 import com.insper.partida.game.dto.GameReturnDTO;
 import com.insper.partida.game.dto.SaveGameDTO;
@@ -12,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -30,7 +28,7 @@ public class GameService {
             Team tHome = teamService.getTeam(home);
             Team tAway = teamService.getTeam(away);
 
-            Page<Game> games = gameRepository.findByHomeAndAway(tHome, tAway, pageable);
+            Page<Game> games = gameRepository.findByHomeAndAway(tHome.getIdentifier(), tAway.getIdentifier(), pageable);
             return games.map(game -> GameReturnDTO.covert(game));
 
         } else if (attendance != null) {
@@ -52,8 +50,8 @@ public class GameService {
 
         Game game = new Game();
         game.setIdentifier(UUID.randomUUID().toString());
-        game.setHome(teamM);
-        game.setAway(teamV);
+        game.setHome(teamM.getIdentifier());
+        game.setAway(teamV.getIdentifier());
         game.setAttendance(0);
         game.setScoreHome(0);
         game.setScoreAway(0);
@@ -87,7 +85,7 @@ public class GameService {
     public Integer getScoreTeam(String identifier) {
         Team team = teamService.getTeam(identifier);
 
-        return gameRepository.sumScoreTeamHome(team);
+        return 0;//gameRepository.sumScoreTeamHome(team);
     }
 
     public GameReturnDTO getGame(String identifier) {

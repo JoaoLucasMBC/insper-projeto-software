@@ -3,11 +3,10 @@ package com.insper.partida.aposta;
 import com.insper.partida.game.GameReturnDTO;
 import com.insper.partida.game.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -29,10 +28,10 @@ public class BetService {
     }
 
     public List<Bet> listBets() {
-        return null;
+        return betRespository.findAll().stream().collect(Collectors.toList());
     }
 
-    public Bet verifyBet(Integer betId) {
+    public Bet verifyBet(String betId) {
         return null;
     }
 
