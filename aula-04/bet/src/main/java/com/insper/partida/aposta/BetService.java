@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -28,7 +27,7 @@ public class BetService {
     }
 
     public List<Bet> listBets() {
-        return betRespository.findAll().stream().collect(Collectors.toList());
+        return betRespository.findAll();
     }
 
     public Bet verifyBet(String betId) {
