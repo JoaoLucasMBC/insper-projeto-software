@@ -1,0 +1,347 @@
+{
+	"info": {
+		"_postman_id": "7d3b1316-6765-4358-99b1-4d139357205e",
+		"name": "Insper - jogos (ATV 1)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Save Team",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"identifier\": \"flamengo\",\n    \"name\" : \"Flamengo\",\n    \"stadium\": \"Maracana\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/team",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"team"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Teams",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"identifier\": \"corinthians\",\n    \"name\" : \"Corinthians\",\n    \"stadium\": \"Neo Quimica\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/team",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"team"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save Game",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"home\": \"palmeiras\",\n    \"away\": \"corinthians\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/game",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"game"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Games",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/game?size=5&page=0&sort=attendance,desc&attendance=40000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"game"
+					],
+					"query": [
+						{
+							"key": "size",
+							"value": "5"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "sort",
+							"value": "attendance,desc"
+						},
+						{
+							"key": "attendance",
+							"value": "40000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Game",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"scoreHome\": 4,\n    \"scoreAway\": 2,\n    \"attendance\": 50000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/game/7b72ae48-08e4-4875-9845-a27c53c6a8ad",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"game",
+						"7b72ae48-08e4-4875-9845-a27c53c6a8ad"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bet",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/bet",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"bet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bet Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"result\": \"AWAY\",\n    \"gameIdentifier\": \"7b72ae48-08e4-4875-9845-a27c53c6a8ad\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/bet",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"bet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bet Copy 2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"result\": \"HOME\",\n    \"gameIdentifier\": \"7b72ae48-08e4-4875-9845-a27c53c6a8ax\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/bet",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"bet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Game",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/game/8715f738-24af-43ec-ae14-6e2e2f0cf1d2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"game",
+						"8715f738-24af-43ec-ae14-6e2e2f0cf1d2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Game",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/game/8715f738-24af-43ec-ae14-6e2e2f0cf1d2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"game",
+						"8715f738-24af-43ec-ae14-6e2e2f0cf1d2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Score Game",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/game/7b72ae48-08e4-4875-9845-a27c53c6a8ad/score",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"game",
+						"7b72ae48-08e4-4875-9845-a27c53c6a8ad",
+						"score"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Team",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/team/timedojoao",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"team",
+						"timedojoao"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Bet By Game",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/bet/7b72ae48-08e4-4875-9845-a27c53c6a8ad/game",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"bet",
+						"7b72ae48-08e4-4875-9845-a27c53c6a8ad",
+						"game"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
