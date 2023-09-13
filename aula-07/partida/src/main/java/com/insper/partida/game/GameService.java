@@ -7,6 +7,8 @@ import com.insper.partida.equipe.dto.TeamReturnDTO;
 import com.insper.partida.game.dto.EditGameDTO;
 import com.insper.partida.game.dto.GameReturnDTO;
 import com.insper.partida.game.dto.SaveGameDTO;
+import com.insper.partida.tabela.Tabela;
+import com.insper.partida.tabela.TabelaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +28,9 @@ public class GameService {
 
     @Autowired
     private TeamService teamService;
+
+    @Autowired
+    private TabelaService tabelaService;
 
     public Page<GameReturnDTO> listGames(String home, String away, Integer attendance, Pageable pageable) {
         if (home != null && away != null) {
@@ -76,6 +81,63 @@ public class GameService {
         gameBD.setAttendance(editGameDTO.getAttendance());
         gameBD.setStatus("FINISHED");
 
+        // get both teams
+        Team teamH = teamService.getTeam(gameBD.getHome());
+        Team teamA = teamService.getTeam(gameBD.getAway());
+
+        // get the tabela of both teams
+        Tabela tabelaH = tabelaService.getTabelaByIdentifier(teamH.getIdentifier());
+
+        if (tabelaH == null) {
+            tabelaH = new Tabela();
+            tabelaH.setIdentifier(teamH.getIdentifier());
+            tabelaH.setNome(teamH.getName());
+            tabelaH.setPontos(0);
+            tabelaH.setVitorias(0);
+            tabelaH.setDerrotas(0);
+            tabelaH.setEmpates(0);
+            tabelaH.setGolsPro(0);
+            tabelaH.setGolsContra(0);
+            tabelaH.setJogos(0);
+        }
+
+        Tabela tabelaA = tabelaService.getTabelaByIdentifier(teamA.getIdentifier());
+
+        if (tabelaA == null) {
+            tabelaA = new Tabela();
+            tabelaA.setIdentifier(teamA.getIdentifier());
+            tabelaA.setNome(teamA.getName());
+            tabelaA.setPontos(0);
+            tabelaA.setVitorias(0);
+            tabelaA.setDerrotas(0);
+            tabelaA.setEmpates(0);
+            tabelaA.setGolsPro(0);
+            tabelaA.setGolsContra(0);
+            tabelaA.setJogos(0);
+        }
+
+        // update home team tabela
+        tabelaH.setPontos(tabelaH.getPontos() + verificaResultado(teamH, gameBD));
+        tabelaH.setVitorias(tabelaH.getVitorias() + (verificaVitorias(teamH, gameBD) ? 1 : 0));
+        tabelaH.setDerrotas(tabelaH.getDerrotas() + (verificaDerrotas(teamH, gameBD) ? 1 : 0));
+        tabelaH.setEmpates(tabelaH.getEmpates() + (verificaEmpates(teamH, gameBD) ? 1 : 0));
+        tabelaH.setGolsPro(tabelaH.getGolsPro() + verificaGolsPro(teamH, gameBD));
+        tabelaH.setGolsContra(tabelaH.getGolsContra()  + verificaGolsContra(teamH, gameBD));
+        tabelaH.setJogos(tabelaH.getJogos() + 1);
+
+        // update away team tabela
+        tabelaA.setPontos(tabelaH.getPontos() + verificaResultado(teamA, gameBD));
+        tabelaA.setVitorias(tabelaH.getVitorias() + (verificaVitorias(teamA, gameBD) ? 1 : 0));
+        tabelaA.setDerrotas(tabelaH.getDerrotas() + (verificaDerrotas(teamA, gameBD) ? 1 : 0));
+        tabelaA.setEmpates(tabelaH.getEmpates() + (verificaEmpates(teamA, gameBD) ? 1 : 0));
+        tabelaA.setGolsPro(tabelaH.getGolsPro() + verificaGolsPro(teamA, gameBD));
+        tabelaA.setGolsContra(tabelaH.getGolsContra()  + verificaGolsContra(teamA, gameBD));
+        tabelaA.setJogos(tabelaH.getJogos() + 1);
+
+        // save both tabelas
+        tabelaService.saveTabela(tabelaH);
+        tabelaService.saveTabela(tabelaA);
+
         Game game = gameRepository.save(gameBD);
         return GameReturnDTO.covert(game);
     }
@@ -114,8 +176,6 @@ public class GameService {
             }
         }
 
-        List<Game> games = new ArrayList<>();
-
         for (int i = 0; i < 1000; i++) {
 
             Integer team1 = new Random().nextInt(20);
@@ -125,6 +185,7 @@ public class GameService {
             }
 
             Game game = new Game();
+            game.setIdentifier(UUID.randomUUID().toString());
             game.setHome(teams[team1]);
             game.setAway(teams[team2]);
             game.setScoreHome(new Random().nextInt(4));
@@ -132,17 +193,73 @@ public class GameService {
             game.setStadium(teams[team1]);
             game.setAttendance(new Random().nextInt(4) * 1000);
 
-            //gameRepository.save(game);
-            games.add(game);
+            gameRepository.save(game);
+            EditGameDTO gameedit = new EditGameDTO();
+            gameedit.setAttendance(game.getAttendance());
+            gameedit.setScoreAway(game.getScoreAway());
+            gameedit.setScoreHome(game.getScoreHome());
+            this.editGame(game.getIdentifier(), gameedit);
 
         }
-
-        gameRepository.saveAll(games);
-
 
     }
 
     public List<Game> getGameByTeam(String identifier) {
         return gameRepository.findByHomeOrAway(identifier, identifier);
+    }
+
+
+    private Integer verificaResultado(Team time, Game game) {
+        if (game.getScoreHome() == game.getScoreAway()) {
+            return 1;
+        }
+        if (game.getHome().equals(time.getIdentifier()) && game.getScoreHome() > game.getScoreAway()) {
+            return 3;
+        }
+        if (game.getAway().equals(time.getIdentifier()) && game.getScoreAway() > game.getScoreHome()) {
+            return 3;
+        }
+        return 0;
+    }
+
+    private Integer verificaGolsPro(Team time, Game game) {
+        if (game.getHome().equals(time.getIdentifier())) {
+            return game.getScoreHome();
+        }
+        return game.getScoreAway();
+    }
+
+    private Integer verificaGolsContra(Team time, Game game) {
+        if (game.getHome().equals(time.getIdentifier())) {
+            return game.getScoreAway();
+        }
+        return game.getScoreHome();
+    }
+
+    private boolean verificaVitorias(Team time, Game game) {
+        if (game.getHome().equals(time.getIdentifier()) && game.getScoreHome() > game.getScoreAway()) {
+            return true;
+        }
+        if (game.getAway().equals(time.getIdentifier()) && game.getScoreAway() > game.getScoreHome()) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean verificaDerrotas(Team time, Game game) {
+        if (game.getHome().equals(time.getIdentifier()) && game.getScoreHome() < game.getScoreAway()) {
+            return true;
+        }
+        if (game.getAway().equals(time.getIdentifier()) && game.getScoreAway() < game.getScoreHome()) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean verificaEmpates(Team time, Game game) {
+        if (game.getScoreHome() == game.getScoreAway()) {
+            return true;
+        }
+        return false;
     }
 }
