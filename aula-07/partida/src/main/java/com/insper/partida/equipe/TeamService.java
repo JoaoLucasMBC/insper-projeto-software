@@ -16,7 +16,7 @@ public class  TeamService {
 
 
     public List<TeamReturnDTO> listTeams() {
-        return teamRepository.findAll().stream().map(team -> TeamReturnDTO.covert(team)).collect(Collectors.toList());
+        return teamRepository.findAll().stream().map(TeamReturnDTO::covert).collect(Collectors.toList());
     }
 
     public TeamReturnDTO saveTeam(SaveTeamDTO saveTeam) {

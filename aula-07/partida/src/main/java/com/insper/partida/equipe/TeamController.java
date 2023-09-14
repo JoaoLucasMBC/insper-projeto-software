@@ -29,5 +29,10 @@ public class TeamController {
         teamService.deleteTeam(identifier);
     }
 
+    @GetMapping("/{identifier}")
+    public TeamReturnDTO getTeam(@PathVariable String identifier) {
+        return TeamReturnDTO.covert(teamService.getTeam(identifier));
+    }
+
 
 }

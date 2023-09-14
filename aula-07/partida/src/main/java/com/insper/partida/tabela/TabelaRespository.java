@@ -9,4 +9,6 @@ public interface TabelaRespository extends MongoRepository<Tabela, String> {
 
     Tabela findByIdentifier(String identifier);
 
+    Tabela findByNome(String nome);
+
 }
