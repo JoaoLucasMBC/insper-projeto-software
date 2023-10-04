@@ -3,10 +3,12 @@ package com.insper.partida.game;
 import com.insper.partida.equipe.Team;
 import com.insper.partida.equipe.TeamService;
 import com.insper.partida.equipe.dto.SaveTeamDTO;
-import com.insper.partida.equipe.dto.TeamReturnDTO;
+import com.insper.partida.equipe.exceptions.TeamDoesNotExistException;
 import com.insper.partida.game.dto.EditGameDTO;
 import com.insper.partida.game.dto.GameReturnDTO;
 import com.insper.partida.game.dto.SaveGameDTO;
+import com.insper.partida.game.exceptions.GameDoesNotExistException;
+import com.insper.partida.game.exceptions.GameTeamsEqualException;
 import com.insper.partida.tabela.Tabela;
 import com.insper.partida.tabela.TabelaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -55,7 +56,11 @@ public class GameService {
         Team teamV = teamService.getTeam(saveGameDTO.getAway());
 
         if (teamM == null || teamV == null) {
-            return null;
+            throw new TeamDoesNotExistException();
+        }
+
+        if (teamM.getIdentifier().equals(teamV.getIdentifier())) {
+            throw new GameTeamsEqualException();
         }
 
         Game game = new Game();
@@ -75,6 +80,10 @@ public class GameService {
 
     public GameReturnDTO editGame(String identifier, EditGameDTO editGameDTO) {
         Game gameBD = gameRepository.findByIdentifier(identifier);
+
+        if (gameBD == null) {
+            throw new GameDoesNotExistException();
+        }
 
         gameBD.setScoreAway(editGameDTO.getScoreAway());
         gameBD.setScoreHome(editGameDTO.getScoreHome());
@@ -141,9 +150,11 @@ public class GameService {
     }
 
     public void deleteGame(String identifier) {
-        Game gameBD = gameRepository.findByIdentifier(identifier);
-        if (gameBD != null) {
-            gameRepository.delete(gameBD);
+        Game gameDB = gameRepository.findByIdentifier(identifier);
+        if (gameDB != null) {
+            gameRepository.delete(gameDB);
+        } else {
+            throw new GameDoesNotExistException();
         }
     }
 
@@ -154,7 +165,13 @@ public class GameService {
     }
 
     public GameReturnDTO getGame(String identifier) {
-        return GameReturnDTO.covert(gameRepository.findByIdentifier(identifier));
+
+        Game gameDB = gameRepository.findByIdentifier(identifier);
+        if (gameDB == null) {
+            throw new GameDoesNotExistException();
+        }
+
+        return GameReturnDTO.covert(gameDB);
     }
 
     public void generateData() {

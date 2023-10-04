@@ -48,6 +48,13 @@ public class  TeamService {
     }
 
     public Team getTeam(String identifier) {
-        return teamRepository.findByIdentifier(identifier);
+
+        Team team = teamRepository.findByIdentifier(identifier);
+        if (team != null) {
+            return team;
+        } else {
+            throw new TeamDoesNotExistException();
+        }
+        
     }
 }
