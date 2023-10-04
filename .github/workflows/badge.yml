@@ -1,4 +1,4 @@
-name: build
+name: jacoco_badge
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
       id: jacoco
       uses: cicirello/jacoco-badge-generator@v2
       with:
-        jacoco-csv-file: target/test-results/jacoco/jacoco.csv
+        jacoco-csv-file: ./entrega-4/partida/target/test-results/jacoco/jacoco.csv
         generate-branches-badge: true
 
     - name: Log coverage percentage
