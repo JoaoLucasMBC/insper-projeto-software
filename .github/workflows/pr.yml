@@ -14,7 +14,7 @@ on:
 
 defaults:
   run:
-    working-directory: entrega-4
+    working-directory: ./entrega-4/partida
 
 jobs:
   build:
