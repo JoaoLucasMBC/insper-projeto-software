@@ -18,3 +18,10 @@
 * Atualização das tabelas na função `edit_game`  
 * Rota `/tabela` com resposta por volta de 40ms
 * Disponível na pasta `entrega-2`
+
+### **Entrega 3**
+
+* Implementação de GameControllerAdvice e TeamControllerAdvice
+* Tratamento de erros no GameService e TeamService nos campos indicados pelo enunciado
+* Erros GameDoesNotExist, GameTeamsEqual, TeamDoesNotExist, TeamAlreadyExists personalizados
+* Disponível na pasta `entrega-3`
