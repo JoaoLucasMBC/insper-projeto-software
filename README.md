@@ -25,3 +25,8 @@
 * Tratamento de erros no GameService e TeamService nos campos indicados pelo enunciado
 * Erros GameDoesNotExist, GameTeamsEqual, TeamDoesNotExist, TeamAlreadyExists personalizados
 * Disponível na pasta `entrega-3`
+
+
+### **Entrega 4**
+
+![Coverage](.github/badges/jacoco.svg)
