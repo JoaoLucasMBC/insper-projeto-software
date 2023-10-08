@@ -6,6 +6,7 @@ import com.insper.partida.game.dto.SaveGameDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -25,6 +26,7 @@ public class GameController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public GameReturnDTO saveGame(@RequestBody SaveGameDTO game) {
         return gameService.saveGame(game);
     }
@@ -41,6 +43,7 @@ public class GameController {
     }
 
     @DeleteMapping("/{identifier}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteGame(@PathVariable String identifier) {
         gameService.deleteGame(identifier);
     }
