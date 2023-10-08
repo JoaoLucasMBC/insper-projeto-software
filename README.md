@@ -29,4 +29,10 @@
 
 ### **Entrega 4**
 
-![Coverage](.github/badges/jacoco.svg)
+![Coverage](.github/badges/jacoco.svg)  
+* Implementação de CI/CD
+* Check de build a todo push e PR na main
+* Deploy automático no server AWS
+* Check da coverage ser acima de 20%
+* Apre PR com nova badge
+* Implementação de testes para +20%
