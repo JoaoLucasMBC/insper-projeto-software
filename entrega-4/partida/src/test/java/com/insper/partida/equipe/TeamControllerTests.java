@@ -60,8 +60,60 @@ public class TeamControllerTests {
 
     }
 
+    @Test
+    void test_saveTeam() throws Exception {
+        TeamReturnDTO team = new TeamReturnDTO();
+        team.setIdentifier("time-1");
+
+        Mockito.when(teamService.saveTeam(Mockito.any())).thenReturn(team);
+
+        ObjectMapper om = new ObjectMapper();
+
+        String json = om.writeValueAsString(team);
+
+        MvcResult result = mockMvc
+                .perform(MockMvcRequestBuilders.post("/team")
+                        .contentType("application/json")
+                        .content(json))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andReturn();
+
+        String resp = result.getResponse().getContentAsString();
+        Assertions.assertEquals(json, resp);
+    }
 
 
+    @Test
+    void test_deleteTeam() throws Exception {
+        mockMvc
+                .perform(MockMvcRequestBuilders.delete("/team/1"))
+                .andExpect(MockMvcResultMatchers.status().isNoContent())
+                .andReturn();
+    }
+
+
+    @Test
+    void test_getTeam() throws Exception {
+        Team team = new Team();
+        team.setIdentifier("time-1");
+        team.setId(null);
+        team.setName("Time 1");
+        team.setStadium("Estádio 1");
+
+        Mockito.when(teamService.getTeam(Mockito.any())).thenReturn(team);
+
+        ObjectMapper om = new ObjectMapper();
+
+        String json = om.writeValueAsString(TeamReturnDTO.covert(team));
+
+        MvcResult result = mockMvc
+                .perform(MockMvcRequestBuilders.get("/team/team-1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+
+        String resp = result.getResponse().getContentAsString();
+        Assertions.assertEquals(json, resp);
+    }
 
 
 }
