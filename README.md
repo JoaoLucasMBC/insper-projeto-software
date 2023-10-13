@@ -36,3 +36,12 @@
 * Check da coverage ser acima de 20%
 * Apre PR com nova badge
 * Implementação de testes para +20%
+* Disponível na pasta `entrega-4`
+
+### **Entrega 5**
+
+* Implementação do serviço de User/Login
+* Utilização de Tokens
+* Aplicação de Partida checa token do usuário com filtro antes de todos os requests
+* DTO's e Filters completos
+* Disponível na pasta `entrega-5`
